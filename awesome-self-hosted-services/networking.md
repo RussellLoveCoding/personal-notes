@@ -14,13 +14,13 @@
 
 - **网络**：支持 ipv4 和 ipv6 双栈，运营商为联通;
 - vps: 支持双栈网络的香港节点;
-- 加密通讯协议：xray-reality.
+- 加密通讯协议：[projectx](https://xtls.github.io/) 的 xray-reality.
 
 测试出国线路：
 
 首先测试一下不代理的情况下，对一些目标网站访问的去程路由，接着利用免费试用的机会，测试主流云计算厂商作为代理 vps 对国内网络的线路优化程度，也可参考 [v2ray-agent](https://www.v2ray-agent.com/categories/vps) 的选购指南。注意，这里的路由实验结果只保留路由过程中在城市级别或省份级别的行政区划中的最后一跳，同时隐去隐私 ip 信息。
 
-线路去程路由如下，具体的见下文贴出的实验结果：
+使用 [nexttrace](https://github.com/nxtrace/NTrace-core) 测试线路去程路由得到的结果摘要如下，具体的见下文贴出的实验结果：
 
 - 目标为 `azure-hk`: AS17816 广东联通(take 10ms)-上海联通(take50ms)-日本东京(take 30+ms)-中国香港(take10+ms)
 - 目标为 `digitalocean-singapore` 广东联通-美国加州-新加坡
@@ -113,7 +113,7 @@ AS14061         新加坡-digitalo...      361.99ms             188.166.205.104
 
 搭建 远程代理节点：
 
-经过上一节的测试，可以选出适合自己的 vps. 接着在 vps 搭建代理服务。本文的实验方法采用 [v2ray-agnent](https://www.v2ray-agent.com/) 的 [八合一脚本](https://github.com/mack-a/v2ray-agent), 协议采用 projectX 项目的 相对先进的 reality 协议。
+经过上一节的测试，可以选出适合自己的 vps. 接着在 vps 搭建代理服务。本文的实验方法采用 [v2ray-agnent](https://www.v2ray-agent.com/) 的 [八合一脚本](https://github.com/mack-a/v2ray-agent), 协议采用 projectX](项目的 相对先进的 reality 协议。
 
 这里的例子如下：
 
@@ -128,7 +128,7 @@ AS14061         新加坡-digitalo...      361.99ms             188.166.205.104
 
 本地客户端的搭建：
 
-由于本人只有一个电脑，路由器是主路由也就是运营商提供的光猫，因此要实现本地开发环境的网络能够透明代理的方案有二：一是采用 xray 客户端的 UI 软件；2: 通过 hyper-v 新建一个 openwrt 作为软路由使用。第一种方法由于 Windows 与 linux 方法有异，WSL 在实现[透明代理](https://xtls.github.io/document/level-2/transparent_proxy/transparent_proxy.html) 过程中 遇到依赖缺失等错误，选择第二种方法。
+由于本人只有一个电脑，路由器是主路由也就是运营商提供的光猫，要实现本地开发环境的网络能够透明代理的方案有二：一是采用 xray 客户端的 UI 软件；2: 通过 hyper-v 新建一个 openwrt 作为软路由使用。第一种方法由于 Windows 与 linux 方法有异，WSL 在实现[透明代理](https://xtls.github.io/document/level-2/transparent_proxy/transparent_proxy.html) 过程中 遇到依赖缺失等错误，选择第二种方法。
 
 参考[教程](https://www.77bx.com/212.html)通过 hyper-v 安装预安装了各种插件的 istoreOS, 其中网络接口是使用 从 hyper-v 管理器新建的外部虚拟交换机，绑定了外部物理网卡，以使得 istoreOS 桥接到主机网络。在装好 istoreOS 后连接登入，配置网络接口 如下, 接着其他设备只要在其网络配置处 将 路由、DNS 都设为 istoreOS 的 ip 就可以，这里是 `192.168.1.250` 和 `ipv6.public.ip.prefix::250/64`
 
@@ -177,3 +177,4 @@ config device
 注意 passwall2 选择 tpproxy 并代理 tcp/udp 所有端口的流量，并自行设置好分流总结点的分流配置。
 
 至此，透明代理的网络环境已经实现了。
+
