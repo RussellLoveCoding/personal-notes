@@ -2,18 +2,27 @@ Personal Notes
 
 ## 一些值得尝试的 self-hosted service
 
+生产力
 
+- 远程工作站、云电脑和远程游戏
+- 翻译服务: 集成 deepl/openai, 
+- AI 聊天.
+- 私人助理Leon: Open-source personal assistant who can live on your server.
+- revealjs:Framework for easily creating beautiful presentations using HTML.
+- Habitica:Habit tracker app which treats your goals like a Role Playing Game. Previously called HabitRPG.
+- Firefly III:Firefly III is a modern financial manager. It helps you to keep track of your money and make budget forecasts. It supports credit cards, has an advanced rule engine and can import data from many banks.
+
+自建网盘可以投屏一键播放
 
 自建网盘-备份方案：
 
 ownCloud： All-in-one solution for saving, synchronizing, viewing, editing and sharing files, calendars, address books and more.
 
-automation service:
+自动化:
 
 - Apache Airflow: Airflow is a platform to programmatically author, schedule, and monitor workflows. Website  Source Code
 - Eonza
 - LazyLibrarian: https://gitlab.com/LazyLibrarian/LazyLibrarian
-- Leon: Open-source personal assistant who can live on your server.
 - Lidarr: Lidarr is a music collection manager for Usenet and BitTorrent users.
 - Medusa: Automatic Video Library Manager for TV Shows. It watches for new episodes of your favorite shows, and when they are posted it does its magic.
 - MetaTube: A Web GUI to automatically download music from YouTube add metadata from Spotify, Deezer or Musicbrainz.
@@ -21,7 +30,7 @@ automation service:
 - Radarr:Radarr is an independent fork of Sonarr reworked for automatically downloading movies via Usenet and BitTorrent, à la Couchpotato.
 - Sonarr:Automatic TV Shows downloader and manager for Usenet and BitTorrent. It can grab, sort and rename new episodes and automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 
-communication
+通讯
 
 - 邮件转发：AnonAddy: Open source email forwarding service for creating aliases.
 - DebOps: Your Debian-based data center in a box. A set of general-purpose Ansible roles that can be used to manage Debian or Ubuntu hosts.
@@ -31,7 +40,7 @@ communication
 - Mail-in-a-Box: Turns any Ubuntu server into a fully functional mail server with one command. Website  Source Code
 - Postal: A complete and fully featured mail server for use by websites & web servers.
 
-Database Management
+数据库管理
 
 - NocoDB： No-code platform that turns any database into a smart spreadsheet (alternative to Airtable or Smartsheet).
 - MindsDB：MindsDB is an open source self hosted AI layer for existing databases that allows you to effortlessly develop, train and deploy state-of-the-art machine learning models using standard queries.
@@ -40,27 +49,21 @@ Database Management
 DNS
 
 - AdGuard Home: Free and open source, userfriendly ads & trackers blocking DNS server.
-
 - Pi-hole: A blackhole for Internet advertisements with a GUI for management and monitoring.
 
-- Calibre Web: Web app providing a clean interface for browsing, reading and downloading eBooks using an existing Calibre database.
 
+电子书
+- Calibre Web: Web app providing a clean interface for browsing, reading and downloading eBooks using an existing Calibre database.
 - Kavita:Cross-platform e-book/manga/comic/pdf server and web reader with user management, ratings and reviews, and metatdata support.
 
-  
-
-feed aggregator
+信息流聚合
 
 - FreshRSS:Self-hostable RSS feed aggregator.
-
-
 
 文件传输和同步：
 
 - Nextcloud Access and share your files, calendars, contacts, mail and more from any device, on your terms.
 - ownCloud： All-in-one solution for saving, synchronizing, viewing, editing and sharing files, calendars, address books and more.
-
-
 
 文件下载
 
@@ -68,18 +71,13 @@ feed aggregator
 
 - Transmission：Fast, easy, free Bittorrent client.
 
-
-
 物联网-智能家居：
 
 - Domoticz：Home Automation System that lets you monitor and configure various devices like: Lights, Switches, various sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water and much more.
 
 - EMQX：An ultra-scalable open-source MQTT broker. Connect 100M+ IoT devices in one single cluster, move and process real-time IoT data with 1M msg/s throughput at 1ms latency.
 - Home Assistant：Open-source home automation platform.
-- Home Assistant
-  Open-source home automation platform.
-
-
+- Home Assistant：Open-source home automation platform.
 
 流媒体
 
@@ -90,13 +88,6 @@ feed aggregator
 Jellyfin
 
 - Media server for audio, video, books, comics, and photos with a sleek interface and robust transcoding capabilities. Almost all modern platforms have clients, including Roku, Android TV, iOS, and Kodi.
-
-生产力
-
-- revealjs:Framework for easily creating beautiful presentations using HTML.
-
-- Habitica:Habit tracker app which treats your goals like a Role Playing Game. Previously called HabitRPG.
-- Firefly III:Firefly III is a modern financial manager. It helps you to keep track of your money and make budget forecasts. It supports credit cards, has an advanced rule engine and can import data from many banks.
 
 书签：
 
@@ -118,6 +109,7 @@ Jellyfin
 
 - Proxy:Nginx Proxy Manager: Nginx Proxy Manager is an easy way to accomplish reverse proxying hosts with SSL termination.
 - frp
+- xray
 
 喜闻乐见的食谱/吃货 部分：
 
