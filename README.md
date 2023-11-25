@@ -12,6 +12,11 @@ Personal Notes
 - Habitica:Habit tracker app which treats your goals like a Role Playing Game. Previously called HabitRPG.
 - Firefly III:Firefly III is a modern financial manager. It helps you to keep track of your money and make budget forecasts. It supports credit cards, has an advanced rule engine and can import data from many banks.
 
+[网络](./awesome-self-hosted-services/networking.md)：
+- Proxy:Nginx Proxy Manager: Nginx Proxy Manager is an easy way to accomplish reverse proxying hosts with SSL termination.
+- frp
+- xray
+
 自建网盘可以投屏一键播放
 
 自建网盘-备份方案：
@@ -105,11 +110,6 @@ Jellyfin
 
 - PhotoPrism:Personal photo management powered by Go and Google TensorFlow. Browse, organize, and share your personal photo collection, using the latest technologies to automatically tag and find pictures.
 
-代理：
-
-- Proxy:Nginx Proxy Manager: Nginx Proxy Manager is an easy way to accomplish reverse proxying hosts with SSL termination.
-- frp
-- xray
 
 喜闻乐见的食谱/吃货 部分：
 
