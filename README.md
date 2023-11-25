@@ -2,6 +2,9 @@ Personal Notes
 
 ## 一些值得尝试的 self-hosted service
 
+[搭建服务器](./awesome-self-hosted-services/闲置设备改造服务器.md)
+- [postmarketOS](https://postmarketos.org/)
+
 生产力
 
 - 远程工作站、云电脑和远程游戏
