@@ -2,8 +2,9 @@ Personal Notes
 
 ## 一些值得尝试的 self-hosted service
 
-[搭建服务器](./awesome-self-hosted-services/闲置设备改造服务器.md)
+搭建服务器
 - [postmarketOS](https://postmarketos.org/)
+- [闲置手机搭建linux服务器](./awesome-self-hosted-services/闲置设备改造服务器.md)
 
 生产力
 
