@@ -2,6 +2,104 @@
 
 [toc]
 
+本文简单介绍了实践的具体步骤和遇到的问题以及解决方案。
+
+## 实践
+
+准备：
+
+1. 购买域名；
+2. 购买证书或者 使用 LetsEncrypte 的免费证书
+3. 安装 docker
+
+正式开始：
+
+参考 [vaultwarden 的 wiki](https://github.com/dani-garcia/vaultwarden/wiki/Using-Docker-Compose),  开启 vaultwarden 采用容器的边车模式，其中实现 vaultwarden 容器开启 http 服务，Caddy 容器充当边车实现 SSL 的加密与解密，也就是作为一个反向代理。具体如下图所示。
+
+![Helper Containers — Sidecar, Adapter, Ambassador Patterns | by Manjit Singh  | Medium](https://miro.medium.com/v2/resize:fit:1120/1*X7LfnlX0ckNC5CUyorQyBg.png)
+
+vaultwarden wiki 的 [Caddy with HTTP challenge](https://github.com/dani-garcia/vaultwarden/wiki/Using-Docker-Compose#caddy-with-http-challenge) 方案无须我们购买证书，直接使用 Letsencrypt 的免费证书，在启动容器后，会自动申请证书。
+
+具体实践步骤：
+
+在服务器上新建一个 `vault` 的文件夹：
+
+```bash
+mkdir vault
+cd vault
+```
+
+创建 `docker-compose.yml` 文件并粘贴进去如下的内容，其中需要替代你的域名和邮箱地址， 另外可以根据实际需要修改映射端口，例如中国家宽不允许 443 端口，这里可以修改：
+
+```yaml
+version: '3'
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: always
+    environment:
+      DOMAIN: "https://vaultwarden.example.com"  # Your domain; vaultwarden needs to know it's https to work properly with attachments
+    volumes:
+      - ./vw-data:/data
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: always
+    ports:
+      - 80:80  # Needed for the ACME HTTP-01 challenge.
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy-config:/config
+      - ./caddy-data:/data
+    environment:
+      DOMAIN: "https://vaultwarden.example.com"  # Your domain.
+      EMAIL: "admin@example.com"                 # The email address to use for ACME registration.
+      LOG_FILE: "/data/access.log"
+```
+
+
+
+创建一个为 Caddyfile 的文件，并粘贴以下内容进去，无需修改任何内容，Caddy 容器需要与 Letsencryt 网站协商获取证书，因此需要开放 80 端口，：
+
+```Caddyfile
+{$DOMAIN}:443 {
+  log {
+    level INFO
+    output file {$LOG_FILE} {
+      roll_size 10MB
+      roll_keep 10
+    }
+  }
+
+  # Use the ACME HTTP-01 challenge to get a cert for the configured domain.
+  tls {$EMAIL}
+
+  # This setting may have compatibility issues with some browsers
+  # (e.g., attachment downloading on Firefox). Try disabling this
+  # if you encounter issues.
+  encode gzip
+
+  # Proxy everything Rocket
+  reverse_proxy vaultwarden:80 {
+       # Send the true remote IP to Rocket, so that vaultwarden can put this in the
+       # log, so that fail2ban can ban the correct IP.
+       header_up X-Real-IP {remote_host}
+  }
+}
+```
+
+运行命令 启动容器，至此完成了 vaultwarden 的部署。
+
+```bash
+docker compose up -d  # or `docker-compose up -d` if using standalone Docker Compose
+```
+
+## 实践中的问题
+
 目前遇到了个重定向死循环的问题, 
 
 实际是 Cloudflare 在对应网站上要设置严格的 SSL 加密模式: 
