@@ -4,15 +4,101 @@
 
 本文简单介绍了实践的具体步骤和遇到的问题以及解决方案。
 
-## 实践
+大概包含
 
-准备：
+1. 购买域名, 并搭建 ddns.
+2. 购买证书或者 使用 LetsEncrypte 或者 Cloudflare 的免费证书
+3. 安装 docker（略）
+4. 编写 docker-compose.yaml 和 Caddyfile 启动。
 
-1. 购买域名；
-2. 购买证书或者 使用 LetsEncrypte 的免费证书
-3. 安装 docker
+## DDNS 搭建
 
-正式开始：
+购买域名过程略。
+
+首先在域名注册商将 其 nameserver 改为 cloudflare.com 提供的地址，接着在 Cloudflare.com 通过添加 CNAME 记录 来确定对域名的所有权，这个可以在域名注册商的网站中的教程找到或者谷歌之。
+
+在 cloudflare.com 导航到 your domain website => Overview , 记录右下角的 ZoneID, 
+
+导航到 My Profile =>  API Tokens => API keys => Global API Key => View, 输入密码查看并记录 global key
+
+> 这里为什么使用全局的 key 而非创建一个具有最小权限的 key 呢，因为使用最小权限的 key 我获取不了 record_id， 总提示 authentication error.
+
+导航到 cloudflare.com =>  your domain website => DNS => add record: 假设是 ipv6 的话，填写以下几个字段的值：
+
+```json
+{
+    "Type": "AAAA",
+    "Name (required)": "ipv6-ddns.your.domain",
+    "IPv6 address (required)": "::1", 
+    "Proxy status": false,
+    "TTL": "5min"
+}
+```
+
+将上面记录到的 敏感信息以如下形式保存到 `$HOME/.secrets/cloudflare.env`, 并修改权限 `chmod 600 $HOME/.secrets/cloudflare.env`
+
+```bash
+export API_KEY="your key"
+export EMAIL="email addr"
+export ZONE_ID="your zone id"
+export RECORD_NAME="your record name"
+```
+
+此时可通过如下命令测试 api_key 的有效性：
+
+```bash
+$HOME/.secrets/cloudflare.env
+curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?type=AAAA&name=$RECORD_NAME&content=127.0.0.1&page=1&per_page=100&order=type&direction=desc&match=any" \
+    -H "X-Auth-Email: $EMAIL" \
+    -H "X-Auth-Key: $API_KEY" \
+    -H "Content-Type: application/json" \
+    | python -m json.tool
+```
+
+接下来可以采取两种方式来构建 DDNS 客户端：
+
+1. [自己编写脚本+crontab 定时任务](https://zhuanlan.zhihu.com/p/69379645)
+2. 采用 社区维护的 支持多个供应商的 [DDNS 客户端](https://github.com/NewFuture/DDNS)
+
+具体参考其[教程](https://ddns.newfuture.cc/), 其中比较好的实践也是将敏感信息存储到特定位置，如 `$HOME/.secrets/ddns-cfg.json`
+
+```json
+{
+  "$schema": "https://ddns.newfuture.cc/schema/v2.8.json",
+  "id": "12345",
+  "token": "mytokenkey",
+  "dns": "dnspod 或 dnspod_com 或 alidns 或 dnscom 或 cloudflare 或 he 或 huaweidns 或 callback",
+  "ipv4": ["ddns.newfuture.cc", "ipv4.ddns.newfuture.cc"],
+  "ipv6": ["ddns.newfuture.cc", "ipv6.ddns.newfuture.cc"],
+  "index4": 0,
+  "index6": "public",
+  "ttl": 600,
+  "proxy": "127.0.0.1:1080;DIRECT",
+  "debug": false
+}
+```
+
+保存好配置文件后，接着执行，过会可看到 Cloudflare.com 的网站已更新 AAAA 记录
+
+```bash
+docker run -d \
+  -v $HOME/.secrets/ddns-cfg.json:/config.json \
+  --network host \
+  --name ddns \
+  newfuture/ddns
+```
+
+
+
+
+
+## SSL 证书配置
+
+1. 导航到 cloudfalre.com 的 dashboard => your domain website => SSL/TLS => Origin Server => Create Certificate 
+2. 选择 RSA 2048 加密算法；选择需要的 Hostnames; 选择时长为15年；
+3. 点击创建后，保存 pem/key 即公钥和私钥，将其保存到服务器 `$HOME/.secrets/` 目录下，也可以自定义其他位置，注意 `$HOME/.secrets` 目录要修改其权限和归属，做好保密，如 `[ ! -d $HOME/.secrets ] && mkdir $HOME/.secrets && chown username.username $HOME/.secrets && chmod 700 $HOME/.secrets && touch $HOME/.secrets/domain.pem && touch $HOME/.secrets/domain.key && chmod 600 $HOME/.secrets/domain.*`,
+
+## 启动 Caddy 和 vaultwarden 容器
 
 参考 [vaultwarden 的 wiki](https://github.com/dani-garcia/vaultwarden/wiki/Using-Docker-Compose),  开启 vaultwarden 采用容器的边车模式，其中实现 vaultwarden 容器开启 http 服务，Caddy 容器充当边车实现 SSL 的加密与解密，也就是作为一个反向代理。具体如下图所示。
 
@@ -40,9 +126,9 @@ services:
     container_name: vaultwarden
     restart: always
     environment:
-      DOMAIN: "https://vaultwarden.example.com"  # Your domain; vaultwarden needs to know it's https to work properly with attachments
+      DOMAIN: "https://your.domain"  # Your domain; vaultwarden needs to know it's https to work properly with attachments
     volumes:
-      - ./vw-data:/data
+      - $HOME/docker-data/vaultwarden:/data
 
   caddy:
     image: caddy:2
@@ -50,22 +136,21 @@ services:
     restart: always
     ports:
       - 80:80  # Needed for the ACME HTTP-01 challenge.
-      - 443:443
+      - 8888:443 # change port if needed
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./caddy-config:/config
-      - ./caddy-data:/data
+      - $HOME/docker-data/caddy:/data
+      - $HOME/.secrets:/etc/ssl/pem:ro
+      - $HOME/.secrets:/etc/ssl/private:ro
     environment:
-      DOMAIN: "https://vaultwarden.example.com"  # Your domain.
-      EMAIL: "admin@example.com"                 # The email address to use for ACME registration.
       LOG_FILE: "/data/access.log"
 ```
-
-
 
 创建一个为 Caddyfile 的文件，并粘贴以下内容进去，无需修改任何内容，Caddy 容器需要与 Letsencryt 网站协商获取证书，因此需要开放 80 端口，：
 
 ```Caddyfile
+
 {$DOMAIN}:443 {
   log {
     level INFO
@@ -75,19 +160,13 @@ services:
     }
   }
 
-  # Use the ACME HTTP-01 challenge to get a cert for the configured domain.
-  tls {$EMAIL}
+  tls /etc/ssl/pem/your.domain.pem /etc/ssl/private/your.domain.key
 
-  # This setting may have compatibility issues with some browsers
-  # (e.g., attachment downloading on Firefox). Try disabling this
-  # if you encounter issues.
   encode gzip
 
-  # Proxy everything Rocket
   reverse_proxy vaultwarden:80 {
-       # Send the true remote IP to Rocket, so that vaultwarden can put this in the
-       # log, so that fail2ban can ban the correct IP.
-       header_up X-Real-IP {remote_host}
+       header_up X-Real-IP {http.request.header.Cf-Connecting-Ip}
+
   }
 }
 ```
@@ -282,3 +361,4 @@ CONTAINER ID   IMAGE                       COMMAND                  CREATED     
 ]
 ```
 
+`
