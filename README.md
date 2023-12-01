@@ -37,6 +37,7 @@ Personal Notes
 - revealjs:Framework for easily creating beautiful presentations using HTML.
 - Habitica:Habit tracker app which treats your goals like a Role Playing Game. Previously called HabitRPG.
 - Firefly III:Firefly III is a modern financial manager. It helps you to keep track of your money and make budget forecasts. It supports credit cards, has an advanced rule engine and can import data from many banks.
+- [bitwarden](./awesome-self-hosted-services/vaultwarden.md)
 
 [网络](./awesome-self-hosted-services/networking.md)：
 - Proxy:Nginx Proxy Manager: Nginx Proxy Manager is an easy way to accomplish reverse proxying hosts with SSL termination.
