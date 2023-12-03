@@ -11,6 +11,7 @@ Personal Notes
 
 - [postmarketOS](https://postmarketos.org/)
 - [闲置手机搭建linux服务器](./awesome-self-hosted-services/闲置设备改造服务器.md)
+- [围绕二手洋垃圾 AMD  epyc 7d12, 7542,  Intel E5 2690 v4 CPU 搭建 云电脑服务器、工作站、通用型服务器](./awesome-self-hosted-services/DIY-servers.md)
 
 > 个人网站和博客： 带有住宅IP的云服务器可以用于托管个人网站、博客和在线媒体内容，使个人用户能够通过自己的IP地址提供在线内容和服务。
 >

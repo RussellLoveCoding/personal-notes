@@ -197,7 +197,7 @@ Here is some tests run on container and host:
   55acb0aeec93   caddy:2 
   0469c59ba0d6   vaultwarden/server:latest
   
-  $ docker exec -it 55acb0aeec93 /bin/sh
+  $ docker exec -it caddy /bin/sh
   /srv # wget vaultwarden:80
   Connecting to vaultwarden:80 (172.18.0.2:80)
   saving to 'index.html'
@@ -209,11 +209,11 @@ Here is some tests run on container and host:
   
   ```
   
-- test2: 在宿主机 内测试 vaultwarden 服务的连通性，使用命令 `curl --resolve your.domain:443:127.0.0.1 https://your.domain`. `--resolve` 是一个 `curl` 的选项，用于设置一个自定义的 DNS 解析。格式为 `[host]:[port]:[ip]`。在这个命令中，`your.domain:443:127.0.0.1` 表示将域名 `your.domain` 的 `443` 端口解析到 `127.0.0.1`。
-
+  - test2: 在宿主机 内测试 vaultwarden 服务的连通性，使用命令 `curl --resolve your.domain:443:127.0.0.1 https://your.domain`. `--resolve` 是一个 `curl` 的选项，用于设置一个自定义的 DNS 解析。格式为 `[host]:[port]:[ip]`。在这个命令中，`your.domain:443:127.0.0.1` 表示将域名 `your.domain` 的 `443` 端口解析到 `127.0.0.1`。
+  
 - ```bash
-   $ curl --resolve your.domain:443:127.0.0.1 https://your.domain
-    <!doctype html><html class="theme_light"><head><meta charset="utf-8"/><meta name="viewport" content="width=1010"/><meta name="theme-color" content="#175DDC"/><title page-title>Vaultwarden Web</title><link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png"/><link rel="icon" 
+  $ curl --resolve your.domain:443:127.0.0.1 https://your.domain
+   <!doctype html><html class="theme_light"><head><meta charset="utf-8"/><meta name="viewport" content="width=1010"/><meta name="theme-color" content="#175DDC"/><title page-title>Vaultwarden Web</title><link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png"/><link rel="icon" 
   ```
 
 Here is my log from vaultwarden container
