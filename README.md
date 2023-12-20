@@ -1,55 +1,140 @@
-Personal Notes
+# 了不起的自托管服务实践
 
-## 一些值得尝试的 self-hosted service
+[toc]
 
-**HomeLab 方案**
+## 目标
 
-- 计划中...
-- 效果：远程工作站、云电脑和远程游戏。 everything everywhere. 
+1. homelab
+2. 开放性
+3. 发挥数字价值
+   1. 打破数字壁垒
+   2. 提高生产力
+   3. 家庭存储
 
-搭建服务器
+## 从硬件开始搭建服务器
+
+互联网大厂在解决了自身所遇到的大规模的运维、并发等服务难题后，将计算资源抽象出来，提供 PAAS等云服务平台，使得计算、存储等资源自来水一样可供弹性突发使用，即使对于个人而言也十分友好，就是太贵了。
+
+由于二手市场的存在和开源社区的繁荣，自己搭建也绝非难事。
 
 - [postmarketOS](https://postmarketos.org/)
 - [闲置手机搭建linux服务器](./awesome-self-hosted-services/闲置设备改造服务器.md)
-- [围绕二手洋垃圾 AMD  epyc 7d12, 7542,  Intel E5 2690 v4 CPU 搭建 云电脑服务器、工作站、通用型服务器](./awesome-self-hosted-services/DIY-servers.md)
+- [围绕二手洋垃圾 AMD  epyc 7d12, 7542,  Intel E5 2690 v4 CPU 搭建 云电脑服务器、通用型服务器](./awesome-self-hosted-services/DIY-servers.md)
 
-> 个人网站和博客： 带有住宅IP的云服务器可以用于托管个人网站、博客和在线媒体内容，使个人用户能够通过自己的IP地址提供在线内容和服务。
->
-> 家庭媒体中心： 带有住宅IP的云服务器可以用作家庭媒体中心，存储和共享家庭照片、视频和音乐，使家庭成员可以从任何地方访问和分享多媒体内容。
->
-> 远程桌面和远程访问： 通过带有住宅IP的云服务器，个人用户可以远程访问和控制他们的计算机或家庭网络，方便远程办公、文件访问和远程技术支持。
->
-> 私人游戏服务器： 带有住宅IP的云服务器可以用于托管私人游戏服务器，允许个人用户创建和管理自己的游戏世界，与朋友一起畅玩游戏。
->
-> 数据备份和存储： 通过带有住宅IP的云服务器，个人用户可以进行数据备份和存储，将重要文件和数据安全地存储在云端，以防止数据丢失和硬件故障。
->
-> 私人虚拟专用网络： 带有住宅IP的云服务器可以用于设置私人代理，提供加密的网络连接，增加网络安全性和隐私保护。
->
-> 住宅IP和机房IP在用途、可靠性、带宽和性能等方面存在差异。带有住宅IP的云服务器可以为个人用户提供托管个人网站、家庭媒体中心、远程访问、私人游戏服务器、数据备份和存储以及私人VPN等功能。通过选择适合的云服务提供商和合适的住宅IP配置，个人用户可以充分利用带有住宅IP的云服务器来满足个人和家庭的互联网需求。
->
->
-> USA-IDC是站长比较推荐和认可的一个服务商，可提供家宽/商宽的IP，不会面临风控的问题，完全模拟正常使用网络，他们家的机器分布机房挺多，价格也很低，点击下方入口联系客服购买全线VPS都打折
+## HomeLab 方案
 
-生产力
+参见 [DIY-Server.smd](./awesome-self-hosted-services/DIY-servers.md)
 
+## 云电脑
+
+参见 [DIY-Server.smd](./awesome-self-hosted-services/DIY-servers.md)
+
+
+## 存储方案
+
+需求：
+
+1. 低调地提供稳定安全的多端数据同步与备份服务；
+2. 生态与整合：低调无缝地融合到 linux, android, windows, ios 为本地盘，仿佛忘记了这是个网盘
+3. 低调无缝地融合到，如协作办公(WPS/MS office/自己搭建一个 onlyoffice)、笔记同步(typora/onenotes) 、媒体(影音娱乐)、书籍阅读
+4. 在可用性方面可能有待提升。
+5. 对于具有 linux 和 编程经验的人搭建并不是难事，开箱即用当然最好，但如果不是，也不需要花费太多时间精力去维护。
+6. 能够分享、协作
+7. 能够增量备份
+
+网上较多人推荐的可选解决方案如下
+
+群晖自带应(Drive, Active Backup For Business, High Availability 套件)；Nextcloud：(NEXTCLOUD+photoprism)；Seafile：(Seafile + SeaDrive2.0(客户端 2.0 支持 cfapi))；ownCloud；FileRun；Syncthing； Cloudreve；Syncthing ，支持 P2P 传输。
+
+下面是这几种方案的横向对比：
+
+| 功能/解决方案      | 群晖自带应用                                                 | Nextcloud                                            | Seafile                                          | ownCloud                                             | FileRun                                            | Syncthing                                               | Cloudreve                                          |
+| ------------------ | ------------------------------------------------------------ | ---------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------- |
+| 复杂程度           | 简单，开箱即用                                               | 中等，需要自己搭建                                   | 中等，需要自己搭建                               | 中等，需要自己搭建                                   | 中等，需要自己搭建                                 | 中等，需要自己搭建                                      | 中等，需要自己搭建                                 |
+| 多端同步           | 支持，有手机 app 和 PC 客户端                                | 支持，有手机 app 和 PC 客户端                        | 支持，有手机 app 和 PC 客户端                    | 支持，有手机 app 和 PC 客户端                        | 支持，有手机 app 和 PC 客户端                      | 支持，有手机 app 和 PC 客户端                           | 支持，有手机 app 和 PC 客户端                      |
+| 增量备份和历史版本 | 支持                                                         | 支持                                                 | 支持                                             | 支持                                                 | 支持                                               | 支持                                                    | 支持                                               |
+| 分享和下载直链     | 支持                                                         | 支持                                                 | 支持                                             | 支持                                                 | 支持                                               | 不支持                                                  | 支持                                               |
+| 异地高可用部署     | 支持                                                         | 支持                                                 | 支持                                             | 支持                                                 | 支持                                               | 支持                                                    | 支持                                               |
+| 生态               | 与群晖的其他产品有很好的整合性                               | 有很多插件可以扩展功能，与其他应用的整合性较好       | 有一些插件可以扩展功能，与其他应用的整合性较好   | 有一些插件可以扩展功能，与其他应用的整合性较好       | 与其他应用的整合性较好                             | 与其他应用的整合性较好                                  | 与其他应用的整合性较好                             |
+| 优缺点             | 优点是使用方便，功能齐全，缺点是可能不如其他开源解决方案灵活 | 优点是功能强大，可扩展性好，缺点是需要自己搭建和维护 | 优点是功能强大，性能好，缺点是需要自己搭建和维护 | 优点是功能强大，可扩展性好，缺点是需要自己搭建和维护 | 优点是界面友好，功能强大，缺点是需要自己搭建和维护 | 优点是支持 P2P 传输，性能好，缺点是不支持分享和下载直链 | 优点是界面友好，功能强大，缺点是需要自己搭建和维护 |
+
+## 家庭媒体中心
+
+video/audio/photo
+
+目标：私有 youtube + 手机相册服务 + 音乐服务器
+
+参考：youtube 很好：很好地融合 UGC 和公开发行视频
+
+记住你是需要一个豆瓣，需要一个索引 + 一键播放的功能。
+
+需求：
+
+1. 照片服务器，能够云同步个人相册；同时本地应用能够分类；家庭共享与画廊。
+2. 类似 YouTube 融合个人私人视频和公开发行视频；融合到豆瓣里，即在豆瓣里新增一个一键播放；具有流媒体服务器，能够转码，或者原画播放视频；海报墙；能够 DLNA 投屏。对于怎么生成个人历史啊等等，建议使用豆瓣 APP.
+3. 音乐服务器：目前最简单的方案是使用 unblockneteasemusic, 手机端是想办法将  webdav 映射到本地，再用 网易云音乐扫。
+4. 多端需求
+
+解决方案：
+
+视频: emby, jellyfin, plex
+
+音乐: 
+
+下面是这几种方案的横向对比：
+
+
+
+案例：
+
+1. 115 + 阿里云 + alist + 索引服务器
+
+夸克网盘+阿里网盘+115 网盘+alist+emby。
+
+Emby, Jellyfin和Plex都是流行的媒体服务器软件，它们都可以在家庭媒体中心上部署，用于管理和播放个人的音乐、电影、电视节目等媒体文件。以下是它们的一些主要特点和区别：
+
+1. Emby：
+   - Emby是一个付费软件，虽然有免费版本，但是一些高级功能需要购买Emby Premiere才能使用。
+   - Emby支持各种设备，包括Windows、Mac、Linux、Android、iOS等。
+   - Emby的用户界面友好，易于使用。
+   - Emby支持实时转码，可以根据设备和网络条件自动调整播放质量。
+
+2. Jellyfin：
+   - Jellyfin是Emby的一个开源分支，完全免费，包括一些Emby需要付费才能使用的功能。
+   - Jellyfin支持的设备较少，主要是Windows、Mac、Linux和Android。
+   - Jellyfin的用户界面相对较为简洁，可能需要一些时间来熟悉。
+   - Jellyfin也支持实时转码，但是性能可能不如Emby。
+
+3. Plex：
+   - Plex也是一个付费软件，有免费版本，但是一些高级功能需要购买Plex Pass才能使用。
+   - Plex支持的设备最多，包括Windows、Mac、Linux、Android、iOS、各种智能电视和游戏机等。
+   - Plex的用户界面非常友好，易于使用，而且有很多个性化设置。
+   - Plex支持实时转码，性能非常好，而且有一些独特的功能，比如能够自动下载电影和电视节目的字幕。
+
+总的来说，如果你希望有一个完全免费的解决方案，那么Jellyfin是最好的选择。如果你希望有更多的功能和更好的用户体验，那么可以考虑购买Emby或者Plex的付费版本。
+
+## 生产力
+
+- [ ] 远程办公，office 套件: ppt, 画图等等
+- [ ] 密码服务：[bitwarden](./awesome-self-hosted-services/vaultwarden.md)
+- [ ] vscode server: 
 - 翻译服务: 集成 deepl/openai, 
 - AI 聊天.
 - 私人助理Leon: Open-source personal assistant who can live on your server.
 - revealjs:Framework for easily creating beautiful presentations using HTML.
 - Habitica:Habit tracker app which treats your goals like a Role Playing Game. Previously called HabitRPG.
 - Firefly III:Firefly III is a modern financial manager. It helps you to keep track of your money and make budget forecasts. It supports credit cards, has an advanced rule engine and can import data from many banks.
-- [bitwarden](./awesome-self-hosted-services/vaultwarden.md)
 
-[网络](./awesome-self-hosted-services/networking.md)：
+## 云游戏
+
+参见 [DIY-Server.smd](./awesome-self-hosted-services/DIY-servers.md)
+
+##  [网络](./awesome-self-hosted-services/networking.md)
+
 - Proxy:Nginx Proxy Manager: Nginx Proxy Manager is an easy way to accomplish reverse proxying hosts with SSL termination.
 - frp
 - xray
-
-自建网盘可以投屏一键播放
-
-自建网盘-备份方案：
-
-ownCloud： All-in-one solution for saving, synchronizing, viewing, editing and sharing files, calendars, address books and more.
+- VPN
 
 自动化:
 
